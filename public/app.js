@@ -10,7 +10,7 @@
   const HORAS_MAXIMAS = 30;
   const LIMITE_MAXIMO_C = 1372;
   const LIMITE_DESATUALIZADO_MS = 45_000;
-  const CHAVE_PREFERENCIAS = "amg-fornos-selecionados-v1";
+  const CHAVE_PREFERENCIAS = "monitoramento-muflas-esp32-selecionados-v1";
 
   const elementos = {
     app: document.querySelector("#app"),
