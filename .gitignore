@@ -1,0 +1,29 @@
+# Configurações locais e credenciais
+configuracao.json
+configuracao.*.json
+!configuracao.example.json
+credenciais/*
+credenciais/
+
+# Dados e resultados locais
+dados/*
+dados/
+output/
+*.zip
+
+# Firebase local
+.firebaserc
+.firebase/
+firebase-debug.log
+
+# Python e sistema operacional
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+.DS_Store
+
+# Dependências web locais
+node_modules/
