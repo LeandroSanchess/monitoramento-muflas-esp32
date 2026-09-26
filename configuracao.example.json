@@ -1,0 +1,16 @@
+{
+  "serial": {
+    "porta": "",
+    "baud": 115200
+  },
+  "arquivo": {
+    "pasta": "dados"
+  },
+  "firebase": {
+    "database_url": "https://SEU-PROJETO-default-rtdb.firebaseio.com",
+    "painel_url": "https://SEU-PROJETO.web.app",
+    "credencial": "credenciais/service-account.json",
+    "forno_id": "mufla-01",
+    "intervalo_segundos": 15
+  }
+}
