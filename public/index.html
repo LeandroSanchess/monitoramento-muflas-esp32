@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#080b0c">
+    <meta name="description" content="Central de telemetria térmica dos fornos Pechini, tubular e mufla do Advanced Materials Group.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:title" content="Central de Fornos · Advanced Materials Group">
+    <meta property="og:description" content="Acompanhe os fornos Pechini, tubular e mufla simultaneamente ou em detalhes.">
+    <meta property="og:image" content="/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Central de Fornos · Advanced Materials Group">
+    <meta name="twitter:description" content="Acompanhe os fornos Pechini, tubular e mufla simultaneamente ou em detalhes.">
+    <meta name="twitter:image" content="/og.png">
+    <title>Advanced Materials Group · Central de Fornos</title>
+    <link rel="stylesheet" href="styles.css?v=20260912-max-status-1">
+  </head>
+  <body>
+    <div class="page-noise" aria-hidden="true"></div>
+    <div class="ambient-glow glow-one" aria-hidden="true"></div>
+    <div class="ambient-glow glow-two" aria-hidden="true"></div>
+
+    <main class="app-shell" id="app" aria-busy="true">
+      <header class="topbar">
+        <div class="identity">
+          <span class="brand-mark" aria-hidden="true"><i></i></span>
+          <div>
+            <div class="identity-labels">
+              <p class="lab-name">ADVANCED MATERIALS GROUP</p>
+              <span aria-hidden="true"></span>
+              <p class="eyebrow">TELEMETRIA TÉRMICA</p>
+            </div>
+            <h1 id="page-title">Central <span>/</span> Fornos</h1>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="connection-pill" id="connection-pill" data-state="waiting">
+            <span class="connection-pulse" aria-hidden="true"></span>
+            <span id="connection-label">Aguardando dados</span>
+          </div>
+          <button class="danger-button" id="reset-data" type="button" hidden><span aria-hidden="true">↻</span>Resetar forno</button>
+          <button class="ghost-button" id="sign-out" type="button" hidden>Encerrar sessão</button>
+        </div>
+      </header>
+
+      <section class="furnace-toolbar panel" aria-labelledby="furnace-toolbar-title">
+        <div class="toolbar-copy">
+          <p class="section-kicker">PAINEL DE MONITORAMENTO</p>
+          <h2 id="furnace-toolbar-title">Escolha o que deseja acompanhar</h2>
+          <p>Marque de um a três fornos. Use a visão geral para comparar ou abra um forno para ver todos os detalhes.</p>
+        </div>
+
+        <div class="view-and-selection">
+          <button class="overview-button active" id="overview-button" type="button" aria-pressed="true">
+            <span class="overview-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span><strong>Visão geral</strong><small>Comparar selecionados</small></span>
+          </button>
+
+          <div class="furnace-selectors" id="furnace-selectors" aria-label="Selecionar fornos">
+            <article class="furnace-selector" style="--furnace-color: #ff9a62">
+              <label>
+                <input type="checkbox" value="pechini-01" checked>
+                <span class="selector-check" aria-hidden="true">✓</span><span class="selector-index">01</span>
+                <span class="selector-copy"><strong>Forno Pechini</strong><small id="selector-status-pechini-01">Aguardando</small></span>
+              </label>
+              <button type="button" data-open-furnace="pechini-01" aria-label="Abrir painel do forno Pechini">Abrir</button>
+            </article>
+
+            <article class="furnace-selector" style="--furnace-color: #55c6d9">
+              <label>
+                <input type="checkbox" value="tubular-01" checked>
+                <span class="selector-check" aria-hidden="true">✓</span><span class="selector-index">02</span>
+                <span class="selector-copy"><strong>Forno tubular</strong><small id="selector-status-tubular-01">Aguardando</small></span>
+              </label>
+              <button type="button" data-open-furnace="tubular-01" aria-label="Abrir painel do forno tubular">Abrir</button>
+            </article>
+
+            <article class="furnace-selector" style="--furnace-color: #b894ff">
+              <label>
+                <input type="checkbox" value="mufla-01" checked>
+                <span class="selector-check" aria-hidden="true">✓</span><span class="selector-index">03</span>
+                <span class="selector-copy"><strong>Forno mufla</strong><small id="selector-status-mufla-01">Aguardando</small></span>
+              </label>
+              <button type="button" data-open-furnace="mufla-01" aria-label="Abrir painel do forno mufla">Abrir</button>
+            </article>
+          </div>
+        </div>
+
+        <div class="selection-note" aria-live="polite">
+          <span><strong id="selection-count">3</strong>/3 selecionados</span>
+          <small id="selection-feedback">Todos os fornos aparecem na comparação.</small>
+        </div>
+      </section>
+
+      <section class="overview-section" id="overview-section" aria-labelledby="overview-title">
+        <div class="section-heading overview-heading">
+          <div><p class="section-kicker">VISÃO SIMULTÂNEA</p><h2 id="overview-title">Temperaturas agora</h2></div>
+          <div class="fleet-summary" aria-label="Resumo dos fornos selecionados">
+            <span><i class="status-dot online"></i><strong id="online-count">0</strong> online</span>
+            <span><strong id="fleet-average">—</strong> média</span>
+            <span><i class="status-dot alert"></i><strong id="alert-count">0</strong> alertas</span>
+          </div>
+        </div>
+
+        <div class="furnace-cards" id="furnace-cards">
+          <button class="furnace-card panel" type="button" data-furnace-card="pechini-01" style="--furnace-color: #ff9a62">
+            <span class="card-topline"><span class="furnace-number">01</span><span class="card-status" data-level="waiting"><i></i>Aguardando</span></span>
+            <span class="card-name">Forno Pechini</span><span class="card-temperature"><strong>—</strong><small>°C</small></span>
+            <span class="mini-thermal-track"><i></i></span>
+            <span class="card-metrics"><span><small>Tendência</small><strong>—</strong></span><span><small>Atualizado</small><strong>—</strong></span></span>
+            <span class="card-open">Ver detalhes <b aria-hidden="true">↗</b></span>
+          </button>
+
+          <button class="furnace-card panel" type="button" data-furnace-card="tubular-01" style="--furnace-color: #55c6d9">
+            <span class="card-topline"><span class="furnace-number">02</span><span class="card-status" data-level="waiting"><i></i>Aguardando</span></span>
+            <span class="card-name">Forno tubular</span><span class="card-temperature"><strong>—</strong><small>°C</small></span>
+            <span class="mini-thermal-track"><i></i></span>
+            <span class="card-metrics"><span><small>Tendência</small><strong>—</strong></span><span><small>Atualizado</small><strong>—</strong></span></span>
+            <span class="card-open">Ver detalhes <b aria-hidden="true">↗</b></span>
+          </button>
+
+          <button class="furnace-card panel" type="button" data-furnace-card="mufla-01" style="--furnace-color: #b894ff">
+            <span class="card-topline"><span class="furnace-number">03</span><span class="card-status" data-level="waiting"><i></i>Aguardando</span></span>
+            <span class="card-name">Forno mufla</span><span class="card-temperature"><strong>—</strong><small>°C</small></span>
+            <span class="mini-thermal-track"><i></i></span>
+            <span class="card-metrics"><span><small>Tendência</small><strong>—</strong></span><span><small>Atualizado</small><strong>—</strong></span></span>
+            <span class="card-open">Ver detalhes <b aria-hidden="true">↗</b></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="individual-section" id="individual-section" hidden aria-label="Detalhes do forno">
+        <button class="back-button" id="back-to-overview" type="button"><span aria-hidden="true">←</span> Voltar à visão geral</button>
+        <div class="hero-grid">
+          <article class="temperature-stage panel" id="temperature-card" data-level="waiting">
+            <div class="stage-heading">
+              <div><p class="section-kicker">TEMPERATURA ATUAL</p><h2 id="individual-furnace-name">Forno Pechini</h2></div>
+              <span class="live-badge"><i></i> AO VIVO</span>
+            </div>
+            <div class="temperature-visual">
+              <div class="temperature-orbit" id="temperature-orbit" aria-hidden="true"><span class="orbit-tick tick-a"></span><span class="orbit-tick tick-b"></span><span class="orbit-tick tick-c"></span><span class="orbit-tick tick-d"></span></div>
+              <div class="temperature-core"><div class="temperature-row"><span class="temperature-value" id="temperature-value">—</span><span class="temperature-unit">°C</span></div><span class="temperature-caption">MAX31856 · TERMOPAR TIPO K</span></div>
+            </div>
+            <div class="thermal-scale"><div class="thermal-labels"><span>0 °C</span><span>686 °C</span><span>1372 °C</span></div><div class="thermal-track" aria-hidden="true"><span id="thermal-progress"></span></div></div>
+            <div class="stage-footer"><div class="sensor-status"><i aria-hidden="true"></i><div><span>Estado do sensor</span><strong id="sensor-state" data-level="waiting">Sem dados</strong></div></div><span class="safety-limit">Faixa tipo K: −200 a 1372 °C</span></div>
+          </article>
+
+          <aside class="session-panel panel">
+            <div class="session-heading"><div><p class="section-kicker">SESSÃO DE AQUISIÇÃO</p><h2>Ensaio em andamento</h2></div><span class="session-chip" id="individual-number">FORNO 01</span></div>
+            <div class="metrics-grid">
+              <article class="metric-card primary-metric"><span class="metric-label">Tempo decorrido</span><strong id="elapsed-value">—</strong><small>relógio monotônico do ESP32</small></article>
+              <article class="metric-card"><span class="metric-label">Tendência térmica</span><strong id="trend-value" data-direction="stable">—</strong><small id="trend-detail">aguardando histórico</small></article>
+              <article class="metric-card"><span class="metric-label">Último envio</span><strong id="updated-value">—</strong><small id="updated-detail">nenhuma amostra recebida</small></article>
+              <article class="metric-card"><span class="metric-label">Amostra remota</span><strong id="sample-value">—</strong><small>cópia periódica do registro local</small></article>
+            </div>
+            <div class="telemetry-strip"><div><span>Conversor</span><strong>MAX31856</strong></div><div><span>Intervalo local</span><strong>1 segundo</strong></div><div><span>Quadro bruto</span><strong id="raw-value">—</strong></div><div><span>Status MAX</span><strong id="status-value">—</strong></div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="chart-card panel">
+          <div class="chart-heading">
+            <div><p class="section-kicker">HISTÓRICO TÉRMICO</p><h2 id="chart-title">Comparativo dos fornos</h2><p id="chart-subtitle">Curvas dos fornos selecionados no mesmo eixo.</p></div>
+            <div class="chart-actions"><div class="range-switch" role="group" aria-label="Período do gráfico"><button type="button" data-hours="1">1 h</button><button type="button" data-hours="6">6 h</button><button type="button" data-hours="30" class="active">30 h</button></div><button class="export-button" id="download-csv" type="button" disabled><span aria-hidden="true">↓</span> CSV remoto</button></div>
+          </div>
+          <div class="chart-summary"><div class="chart-legend" id="chart-legend"></div><div class="chart-meta"><span id="chart-points">0 pontos</span><span id="chart-extremes">mín. — · máx. —</span></div></div>
+          <div class="chart-shell" id="chart-shell"><canvas id="temperature-chart" role="img" aria-label="Gráfico aguardando dados de temperatura"></canvas><div class="chart-tooltip" id="chart-tooltip" hidden></div><div class="chart-empty" id="chart-empty"><span class="empty-orbit" aria-hidden="true"></span><strong>Aguardando a primeira leitura</strong><small>As curvas serão construídas automaticamente.</small></div></div>
+        </article>
+
+        <aside class="events-card panel">
+          <div class="events-heading"><div><p class="section-kicker">DIAGNÓSTICO</p><h2>Eventos recentes</h2></div><span class="event-count" id="event-count" aria-label="Nenhum evento">0</span></div>
+          <ol class="event-list" id="event-list"><li class="empty-event">Nenhum evento recebido.</li></ol>
+          <div class="integrity-note"><span aria-hidden="true">i</span><p>O CSV local em 1 segundo é o registro principal. Este painel supervisiona, mas não controla os fornos.</p></div>
+        </aside>
+      </section>
+
+      <footer><span class="footer-user"><i></i><span id="user-email">Acesso autenticado</span></span><span>Monitor seguro · Firebase Realtime Database</span><span>Não substitui proteções térmicas independentes</span></footer>
+    </main>
+
+    <dialog class="reset-dialog" id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description">
+      <div class="reset-dialog-content">
+        <div class="reset-dialog-heading"><span class="reset-dialog-icon" aria-hidden="true">!</span><div><p class="section-kicker">AÇÃO IRREVERSÍVEL</p><h2 id="reset-title">Resetar dados do forno?</h2></div></div>
+        <p id="reset-description" class="reset-dialog-description">A leitura atual e todo o histórico remoto serão apagados permanentemente.</p>
+        <div class="reset-target" id="reset-target"><span>01</span><strong>Forno Pechini</strong></div>
+        <div class="reset-warning"><strong>Dados não exportados serão perdidos</strong><p>Baixe o CSV remoto antes de continuar. Os arquivos CSV salvos nos computadores de aquisição não serão apagados.</p></div>
+        <p class="reset-recorder-note">Se o gravador estiver em execução, novas amostras voltarão a aparecer após o reset.</p>
+        <label class="reset-confirmation"><input id="reset-understood" type="checkbox"><span>Entendo que os dados remotos deste forno serão apagados.</span></label>
+        <p class="reset-feedback" id="reset-feedback" role="status" aria-live="polite"></p>
+        <div class="reset-dialog-actions"><button class="ghost-button" id="cancel-reset" type="button">Cancelar</button><button class="confirm-reset-button" id="confirm-reset" type="button" disabled>Apagar dados e resetar</button></div>
+      </div>
+    </dialog>
+
+    <section class="login-layer" id="login-layer" aria-labelledby="login-title">
+      <div class="login-visual" aria-hidden="true"><div class="login-orbit outer"></div><div class="login-orbit middle"></div><div class="login-orbit inner"></div><span>3×</span></div>
+      <div class="login-card">
+        <span class="brand-mark large" aria-hidden="true"><i></i></span><p class="login-lab-name">ADVANCED MATERIALS GROUP</p><p class="eyebrow">CENTRAL DE FORNOS · AMBIENTE RESTRITO</p>
+        <h2 id="login-title">Três fornos, uma única visão.</h2><p>Acompanhe o Pechini, o tubular e a mufla simultaneamente ou abra cada ensaio em detalhes.</p>
+        <button class="primary-button" id="sign-in" type="button"><span aria-hidden="true">G</span>Entrar com Google</button>
+        <div class="login-security"><i aria-hidden="true"></i><span>Leitura privada · dados protegidos pelo Firebase</span></div><p class="login-feedback" id="login-feedback" role="alert"></p>
+      </div>
+    </section>
+
+    <script src="/__/firebase/8.10.1/firebase-app.js"></script>
+    <script src="/__/firebase/8.10.1/firebase-auth.js"></script>
+    <script src="/__/firebase/8.10.1/firebase-database.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script src="app.js?v=20260912-max-status-1"></script>
+  </body>
+</html>
